@@ -5403,7 +5403,7 @@ MAVLINK_MSG_ID_BATTERY_STATUS = 147
 MAVLINK_MSG_ID_AUTOPILOT_VERSION = 148
 MAVLINK_MSG_ID_LANDING_TARGET = 149
 MAVLINK_MSG_ID_FENCE_STATUS = 162
-MAVLINK_MSG_ID_TEST_MSG = 180
+MAVLINK_MSG_ID_FMR_SENSORS = 180
 MAVLINK_MSG_ID_MAG_CAL_REPORT = 192
 MAVLINK_MSG_ID_EFI_STATUS = 225
 MAVLINK_MSG_ID_ESTIMATOR_STATUS = 230
@@ -10984,43 +10984,47 @@ class MAVLink_fence_status_message(MAVLink_message):
 setattr(MAVLink_fence_status_message, "name", mavlink_msg_deprecated_name_property())
 
 
-class MAVLink_test_msg_message(MAVLink_message):
+class MAVLink_fmr_sensors_message(MAVLink_message):
     """
-    Message to test mavlink implementation.
+    Message to include custom sensor values send by Companion
+    computer.
     """
 
-    id = MAVLINK_MSG_ID_TEST_MSG
-    msgname = "TEST_MSG"
-    fieldnames = ["x", "y"]
-    ordered_fieldnames = ["x", "y"]
-    fieldtypes = ["float", "float"]
+    id = MAVLINK_MSG_ID_FMR_SENSORS
+    msgname = "FMR_SENSORS"
+    fieldnames = ["sens_1", "sens_2", "sens_3", "sens_4", "sens_5"]
+    ordered_fieldnames = ["sens_1", "sens_2", "sens_3", "sens_4", "sens_5"]
+    fieldtypes = ["float", "float", "float", "float", "float"]
     fielddisplays_by_name: Dict[str, str] = {}
     fieldenums_by_name: Dict[str, str] = {}
     fieldunits_by_name: Dict[str, str] = {}
-    native_format = bytearray(b"<ff")
-    orders = [0, 1]
-    lengths = [1, 1]
-    array_lengths = [0, 0]
-    crc_extra = 56
-    unpacker = struct.Struct("<ff")
+    native_format = bytearray(b"<fffff")
+    orders = [0, 1, 2, 3, 4]
+    lengths = [1, 1, 1, 1, 1]
+    array_lengths = [0, 0, 0, 0, 0]
+    crc_extra = 186
+    unpacker = struct.Struct("<fffff")
     instance_field = None
     instance_offset = -1
 
-    def __init__(self, x: float, y: float):
-        MAVLink_message.__init__(self, MAVLink_test_msg_message.id, MAVLink_test_msg_message.msgname)
-        self._fieldnames = MAVLink_test_msg_message.fieldnames
-        self._instance_field = MAVLink_test_msg_message.instance_field
-        self._instance_offset = MAVLink_test_msg_message.instance_offset
-        self.x = x
-        self.y = y
+    def __init__(self, sens_1: float, sens_2: float, sens_3: float, sens_4: float, sens_5: float):
+        MAVLink_message.__init__(self, MAVLink_fmr_sensors_message.id, MAVLink_fmr_sensors_message.msgname)
+        self._fieldnames = MAVLink_fmr_sensors_message.fieldnames
+        self._instance_field = MAVLink_fmr_sensors_message.instance_field
+        self._instance_offset = MAVLink_fmr_sensors_message.instance_offset
+        self.sens_1 = sens_1
+        self.sens_2 = sens_2
+        self.sens_3 = sens_3
+        self.sens_4 = sens_4
+        self.sens_5 = sens_5
 
     def pack(self, mav: "MAVLink", force_mavlink1: bool = False) -> bytes:
-        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.x, self.y), force_mavlink1=force_mavlink1)
+        return self._pack(mav, self.crc_extra, self.unpacker.pack(self.sens_1, self.sens_2, self.sens_3, self.sens_4, self.sens_5), force_mavlink1=force_mavlink1)
 
 
 # Define name on the class for backwards compatibility (it is now msgname).
 # Done with setattr to hide the class variable from mypy.
-setattr(MAVLink_test_msg_message, "name", mavlink_msg_deprecated_name_property())
+setattr(MAVLink_fmr_sensors_message, "name", mavlink_msg_deprecated_name_property())
 
 
 class MAVLink_mag_cal_report_message(MAVLink_message):
@@ -12270,7 +12274,7 @@ mavlink_map: Dict[int, Type[MAVLink_message]] = {
     MAVLINK_MSG_ID_AUTOPILOT_VERSION: MAVLink_autopilot_version_message,
     MAVLINK_MSG_ID_LANDING_TARGET: MAVLink_landing_target_message,
     MAVLINK_MSG_ID_FENCE_STATUS: MAVLink_fence_status_message,
-    MAVLINK_MSG_ID_TEST_MSG: MAVLink_test_msg_message,
+    MAVLINK_MSG_ID_FMR_SENSORS: MAVLink_fmr_sensors_message,
     MAVLINK_MSG_ID_MAG_CAL_REPORT: MAVLink_mag_cal_report_message,
     MAVLINK_MSG_ID_EFI_STATUS: MAVLink_efi_status_message,
     MAVLINK_MSG_ID_ESTIMATOR_STATUS: MAVLink_estimator_status_message,
@@ -16927,25 +16931,31 @@ class MAVLink(object):
         """
         self.send(self.fence_status_encode(breach_status, breach_count, breach_type, breach_time), force_mavlink1=force_mavlink1)
 
-    def test_msg_encode(self, x: float, y: float) -> MAVLink_test_msg_message:
+    def fmr_sensors_encode(self, sens_1: float, sens_2: float, sens_3: float, sens_4: float, sens_5: float) -> MAVLink_fmr_sensors_message:
         """
-        Message to test mavlink implementation.
+        Message to include custom sensor values send by Companion computer.
 
-        x                         : Test x value. (type:float)
-        y                         : Test x value. (type:float)
-
-        """
-        return MAVLink_test_msg_message(x, y)
-
-    def test_msg_send(self, x: float, y: float, force_mavlink1: bool = False) -> None:
-        """
-        Message to test mavlink implementation.
-
-        x                         : Test x value. (type:float)
-        y                         : Test x value. (type:float)
+        sens_1                    : Sensor 1 value. (type:float)
+        sens_2                    : Sensor 2 value. (type:float)
+        sens_3                    : Sensor 3 value. (type:float)
+        sens_4                    : Sensor 4 value. (type:float)
+        sens_5                    : Sensor 5 value. (type:float)
 
         """
-        self.send(self.test_msg_encode(x, y), force_mavlink1=force_mavlink1)
+        return MAVLink_fmr_sensors_message(sens_1, sens_2, sens_3, sens_4, sens_5)
+
+    def fmr_sensors_send(self, sens_1: float, sens_2: float, sens_3: float, sens_4: float, sens_5: float, force_mavlink1: bool = False) -> None:
+        """
+        Message to include custom sensor values send by Companion computer.
+
+        sens_1                    : Sensor 1 value. (type:float)
+        sens_2                    : Sensor 2 value. (type:float)
+        sens_3                    : Sensor 3 value. (type:float)
+        sens_4                    : Sensor 4 value. (type:float)
+        sens_5                    : Sensor 5 value. (type:float)
+
+        """
+        self.send(self.fmr_sensors_encode(sens_1, sens_2, sens_3, sens_4, sens_5), force_mavlink1=force_mavlink1)
 
     def mag_cal_report_encode(self, compass_id: int, cal_mask: int, cal_status: int, autosaved: int, fitness: float, ofs_x: float, ofs_y: float, ofs_z: float, diag_x: float, diag_y: float, diag_z: float, offdiag_x: float, offdiag_y: float, offdiag_z: float) -> MAVLink_mag_cal_report_message:
         """
