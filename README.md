@@ -1,5 +1,98 @@
+<a id="readme-top"></a>
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+
+
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/Mathis-Werner/FMRCompanion">
+    <img src="images/FMR-logo-blue.jpg" alt="Logo" width="200" height="200">
+  </a>
+
+<h3 align="center">FMRCompanion</h3>
+</div>
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li><a href="#about-the-project">About The Project</a>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#Setting up the RasPi">Setting up the RasPi</a></li>
+        <li><a href="#Setup in QGroundcontrol">Setup in QGroundcontrol</a></li>
+      </ul>
+    </li>
+    <li><a href="#Code Overview">Code Overview</a></li>
+    <li><a href="#Required python packages">Required python packages</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+This project contains a custom pymavlink fork including messages definitions in the common message set required to send custom messages to the pixhawk flightcontroller. 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Using the libary -->
+## Using the libary
+
+After cloning the repository in the desired location and installing the python packages in the section below the libary can be used like the default version of pymavlink as specified in the FMRCompanion repo.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Development -->
+## Developement
+
+The common.py generated as explained in the corresponding FMR-mavlink repo must be copyed so that it replaces the common.py under dialects\v10
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- Required python packages -->
+## Required python packages
+
+* lxml>=3.6.0
+* future>=0.15.2
+* wheel>=0.37.1
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+<!-- LICENSE -->
+## License
+
+Distributed under the project_license. See `LICENSE.txt` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- CONTACT -->
+## Contact
+
+Mathis Werner - wer.mathis@gmail.com
+
+Project Link: [https://github.com/Mathis-Werner/FMR-pymavlink](https://github.com/Mathis-Werner/FMR-pymavlink)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 [![Build Status](https://travis-ci.org/ArduPilot/pymavlink.svg?branch=master)](https://travis-ci.org/ArduPilot/pymavlink)
-# Pymavlink
+# Pymavlink Original Doc
 This is a Python implementation of the MAVLink protocol.
 It includes a source code generator (generator/mavgen.py) to create MAVLink protocol implementations for other programming languages as well.
 Also contains tools for analyzing flight logs.
